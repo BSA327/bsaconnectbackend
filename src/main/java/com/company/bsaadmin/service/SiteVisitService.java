@@ -10,7 +10,7 @@ import com.company.bsaadmin.entity.SiteVisit;
 import com.company.bsaadmin.repository.SiteVisitRepository;
 
 @Service
-public class SiteVisitService   extends GenericService<SiteVisit, Long>  {
+public class SiteVisitService   extends GenericService<SiteVisit>  {
 
 	private final  SiteVisitRepository repository;
 
@@ -20,8 +20,8 @@ public class SiteVisitService   extends GenericService<SiteVisit, Long>  {
 	}
 
 	
-	public List<SiteVisit> findByBdmIdAndVisitDateBetween(Long bdmId, LocalDate from, LocalDate to) {
-		return repository.findByBdmIdAndVisitDateBetween( bdmId,  from,  to);
+	public List<SiteVisit> findByUserIdAndVisitDateBetween(Long userId, LocalDate from, LocalDate to) {
+		return repository.findByUserIdAndVisitDateBetween( userId,  from,  to);
 	}
 
 

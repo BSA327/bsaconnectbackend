@@ -44,7 +44,7 @@ public class InventoryMediaController {
     @PostMapping("/{id}/media")
     public List<InventoryMedia> upload(@PathVariable Long id,
                                        @RequestParam("files") MultipartFile[] files) throws Exception {
-        Inventory inventory = inventoryRepo.findById(id).get();
+        Inventory inventory = inventoryRepo.findById(id);
         Path dir = Paths.get(uploadDir, "inventory", String.valueOf(id));
         Files.createDirectories(dir);
 

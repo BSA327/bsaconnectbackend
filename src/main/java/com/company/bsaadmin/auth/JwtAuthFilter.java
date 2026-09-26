@@ -38,9 +38,15 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 			{
 				try {
 					if (StringUtils.hasText(elements[1]) && jwtTokenProvider.validateToken(elements[1]) && !jwtTokenProvider.isExpired(elements[1])) {
-						String username = jwtTokenProvider.getUserIdFromJWT(elements[1]);
-						UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null
-								, null);
+						String username = jwtTokenProvider.getFieldFromJWT(elements[1],"username");
+						Long userId = jwtTokenProvider.getUserIdFromJWT(elements[1]);
+						String role = jwtTokenProvider.getFieldFromJWT(elements[1],"role");
+						
+						JwtUserPrincipal principal =new JwtUserPrincipal(userId, username,role);
+
+						UsernamePasswordAuthenticationToken authentication =new UsernamePasswordAuthenticationToken(
+						                principal,null, null);
+
 						authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 						SecurityContextHolder.getContext().setAuthentication(authentication);
 					}else {

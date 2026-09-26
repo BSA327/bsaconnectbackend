@@ -2,6 +2,7 @@ package com.company.bsaadmin.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
+@EnableJpaAuditing(auditorAwareRef = "auditorAwareImpl")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserAuthenticationEnryPoint userAuthenticationEnryPoint;

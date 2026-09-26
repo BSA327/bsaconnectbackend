@@ -1,6 +1,5 @@
 package com.company.bsaadmin.controller;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.company.bsaadmin.dto.request.PasswordRequest;
 import com.company.bsaadmin.dto.request.RegisterUserRequest;
 import com.company.bsaadmin.entity.Employee;
 import com.company.bsaadmin.entity.User;
 import com.company.bsaadmin.service.EmployeeService;
 import com.company.bsaadmin.service.UserService;
+import com.company.bsaadmin.util.SecurityUtils;
 
 @RestController
 @RequestMapping("/api/users")
@@ -45,7 +46,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody RegisterUserRequest user) {
 
-        if (repo.existsByUserName(user.getUserName())) {
+        if (repo.existsByUserName(user.getUsername())) {
             return ResponseEntity
                     .badRequest()
                     .body("Username already exists");
@@ -56,29 +57,18 @@ public class UserController {
 			Employee employee = new Employee();
 			employee.setName(user.getName());
 			employee.setGender(user.getGender());
-			employee.setMobileNumber(user.getMobileNumber());
-			employee.setEmailId(user.getEmailId());
+			employee.setMobileNumber(user.getPhone());
+			employee.setEmailId(user.getEmail());
 			employee.setCommunicationAddress(user.getCommunicationAddress());
-			employee.setPermanentAddress(user.getPermanentAddress());
-			employee.setCity(user.getCity());
-			employee.setState(user.getState());
-			employee.setCountry(user.getCountry());
 			employee.setAadharNumber(user.getAadharNumber());
-			employee.setPanNumber(user.getPanNumber());
 			employee.setJoiningDate(user.getJoiningDate());
-			employee.setCreatedBy(user.getCreatedBy());
-			employee.setCreatedDate(LocalDate.now());
-			employee.setActive(true);
 			Employee emp=empService.save(employee);
 			
 			User useren = new User();
 			useren.setEmployeeId(emp.getId());
-			useren.setUserName(user.getUserName());
+			useren.setUserName(user.getUsername());
 			useren.setPassword(passwordEncoder.encode(user.getPassword()));
 			useren.setRole(User.Role.valueOf(user.getRole()));
-			useren.setCreatedBy(user.getCreatedBy());
-			useren.setCreatedDate(LocalDate.now());
-			useren.setActive(true);
 			repo.save(useren);
 			
 			return ResponseEntity.ok("Saved");
@@ -91,29 +81,83 @@ public class UserController {
 
     
     @PutMapping("/{id}")
-    public User update(@PathVariable Long id, @RequestBody RegisterUserRequest user) {
-        User u = repo.findById(id).get();
-        
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody RegisterUserRequest user) {
+        User u = repo.findById(id);
+        if(u==null || u.getId()==null || u.getEmployee()==null || u.getEmployeeId()==null) {
+        	return ResponseEntity
+                    .badRequest()
+                    .body("No User found for the userid");
+
+        }
         u.getEmployee().setName(user.getName());
         u.getEmployee().setGender(user.getGender());
-        u.getEmployee().setMobileNumber(user.getMobileNumber());
-        u.getEmployee().setEmailId(user.getEmailId());
+        u.getEmployee().setMobileNumber(user.getPhone());
+        u.getEmployee().setEmailId(user.getEmail());
         u.getEmployee().setCommunicationAddress(user.getCommunicationAddress());
-        u.getEmployee().setPermanentAddress(user.getPermanentAddress());
-        u.getEmployee().setCity(user.getCity());
-        u.getEmployee().setState(user.getState());
-        u.getEmployee().setCountry(user.getCountry());
         u.getEmployee().setAadharNumber(user.getAadharNumber());
-        u.getEmployee().setPanNumber(user.getPanNumber());
         u.getEmployee().setJoiningDate(user.getJoiningDate());
-        u.getEmployee().setCreatedBy(user.getCreatedBy());
-        u.getEmployee().setCreatedDate(LocalDate.now());
-		empService.save(u.getEmployee());
-        return repo.save(u);
+		empService.save( u.getEmployee());
+		
+		u.setUserName(user.getUsername());
+		u.setRole(User.Role.valueOf(user.getRole()));
+		u=repo.save(u);
+      
+        return ResponseEntity.ok().body(u);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
        // repo.deleteById(id);
     }
+    
+    
+    
+    @PutMapping("/changepassword")
+	public ResponseEntity<?> changePassword(@RequestBody PasswordRequest request) {
+
+
+        User user = repo.findByUserNameAndActive(SecurityUtils.getUsername());
+
+        // Check current password
+        if (!passwordEncoder.matches(
+        		request.getOldPassword(),
+                user.getPassword())) {
+
+            throw new RuntimeException(
+                    "Current password is incorrect."
+            );
+        }
+
+        // Optional validation
+        if (request.getNewPassword() == null ||
+        		request.getNewPassword() .trim().isEmpty()) {
+
+            throw new RuntimeException(
+                    "New password is required."
+            );
+        }
+
+      
+
+        // Prevent same password
+        if (passwordEncoder.matches(
+        		request.getNewPassword() ,
+                user.getPassword())) {
+
+            throw new RuntimeException(
+                    "New password must be different from current password."
+            );
+        }
+
+        // Encode and save
+        user.setPassword(
+                passwordEncoder.encode(request.getNewPassword() )
+        );
+
+        repo.save(user);
+
+	    return ResponseEntity.ok("Password updated successfully.");
+	    
+	}
+
 }

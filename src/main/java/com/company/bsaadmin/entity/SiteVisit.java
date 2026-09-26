@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,11 +39,16 @@ public class SiteVisit extends Base {
     private Enquiry enquiry;
 
     @ManyToOne(fetch=FetchType.LAZY, optional=false)
-    @JoinColumn(name="bdm_id", nullable=false)
-    private User bdm;
+    @JoinColumn(name="user_id", nullable=false)
+    private User user;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @Column(name="visit_date", nullable=false)
     private LocalDate visitDate;
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+    @Column(name="visit_time", nullable=false)
+    private LocalDate visitTime;
 
     @Enumerated(EnumType.STRING)
     private Status status = Status.SCHEDULED;

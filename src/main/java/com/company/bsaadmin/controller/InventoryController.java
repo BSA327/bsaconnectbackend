@@ -31,7 +31,7 @@ public class InventoryController {
 
     @GetMapping("/{id}")
     public Inventory get(@PathVariable Long id) {
-        return service.findById(id).get();
+        return service.findById(id);
     }
 
     @PostMapping
@@ -43,6 +43,6 @@ public class InventoryController {
     @PutMapping("/{id}")
     public Inventory update(@PathVariable Long id, @RequestBody Inventory input) {
         input.setId(id);
-        return service.save(input);
+        return service.update(id,input);
     }
 }

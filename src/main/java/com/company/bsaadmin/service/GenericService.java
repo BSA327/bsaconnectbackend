@@ -1,27 +1,50 @@
 package com.company.bsaadmin.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.repository.CrudRepository;
 
-public abstract class GenericService<T, ID> {
+public abstract class GenericService<T> {
 
-    protected final JpaRepository<T, ID> repository;
+    private final CrudRepository<T, Long> repository;
 
-    protected GenericService(JpaRepository<T, ID> repository) {
+    public GenericService(CrudRepository<T, Long> repository) {
         this.repository = repository;
-    }
-
-    public List<T> findAll() {
-        return repository.findAll();
-    }
-
-    public Optional<T> findById(ID id) {
-        return repository.findById(id);
     }
 
     public T save(T entity) {
         return repository.save(entity);
+    }
+
+    public T findById(Long id) {
+        return repository.findById(id).orElseThrow(() ->
+        new RuntimeException("Record not found: " + id));
+    }
+    
+    public List<T> findAll() {
+        List<T> result = new ArrayList<>();
+        repository.findAll().forEach(result::add);
+        return result;
+    }
+
+    public T update(Long id, T input) {
+
+        T existing = findById(id);
+                
+
+        BeanUtils.copyProperties(
+                input,
+                existing,
+                "id",
+                "active",
+                "createdDate",
+                "createdBy",
+                "updatedDate",
+                "updatedBy"
+        );
+
+        return save(existing);
     }
 }

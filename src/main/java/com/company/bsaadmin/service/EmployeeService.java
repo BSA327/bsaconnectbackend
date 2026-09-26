@@ -7,7 +7,7 @@ import com.company.bsaadmin.entity.Employee;
 import com.company.bsaadmin.repository.EmployeeRepository;
 
 @Service
-public class EmployeeService  extends GenericService<Employee, Long>  {
+public class EmployeeService  extends GenericService<Employee>  {
 
 	private final  EmployeeRepository repository;
 

@@ -30,7 +30,7 @@ public class CustomerController {
 
     @GetMapping("/{id}")
     public Customer get(@PathVariable Long id) {
-        return service.findById(id).get();
+        return service.findById(id);
     }
 
     @PostMapping
@@ -42,6 +42,6 @@ public class CustomerController {
     @PutMapping("/{id}")
     public Customer update(@PathVariable Long id, @RequestBody Customer input) {
         input.setId(id);
-        return service.save(input);
+        return service.update(id,input);
     }
 }

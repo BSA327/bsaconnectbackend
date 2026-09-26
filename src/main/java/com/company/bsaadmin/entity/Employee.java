@@ -33,17 +33,7 @@ public class Employee extends Base {
 
 	private String communicationAddress;
 
-	private String permanentAddress;
-
-	private String city;
-
-	private String state;
-
-	private String country;
-
 	private String aadharNumber;
-
-	private String panNumber;
 
 	private LocalDate joiningDate;
 

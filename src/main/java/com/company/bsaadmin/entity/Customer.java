@@ -28,16 +28,21 @@ public class Customer extends Base {
 
     private String phone;
     private String email;
-    private String source;
-
+    
     @Enumerated(EnumType.STRING)
-    private Status status = Status.NEW;
+    private Source source;
+    
+    public enum Source { ONLINE, OFFLINE, FIELD_WORK}
 
     @Column(length=2000)
     private String remarks;
 
-    public enum Status { NEW, FOLLOW_UP, CONVERTED, LOST }
-
-
+    private String address;
+    
+    @Enumerated(EnumType.STRING)
+    private Type type;
+    
+    public enum Type { BUY, SELL, BOTH }
+    
 
 }

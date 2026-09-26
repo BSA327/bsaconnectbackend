@@ -11,7 +11,7 @@ import com.company.bsaadmin.entity.Attendance;
 import com.company.bsaadmin.repository.AttendanceRepository;
 
 @Service
-public class AttendanceService  extends GenericService<Attendance, Long>  {
+public class AttendanceService  extends GenericService<Attendance>  {
 
 	private final AttendanceRepository repository;
 

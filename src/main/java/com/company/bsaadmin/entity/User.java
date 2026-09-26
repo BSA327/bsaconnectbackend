@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,6 +42,7 @@ public class User extends Base {
 
 	private String userName;
 
+	@JsonIgnore
 	private String password;
 
 	@Enumerated(EnumType.STRING)

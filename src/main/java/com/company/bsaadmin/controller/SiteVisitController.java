@@ -46,15 +46,15 @@ public class SiteVisitController {
 
     @GetMapping("/{id}")
     public SiteVisit get(@PathVariable Long id) {
-        return visits.findById(id).get();
+        return visits.findById(id);
     }
 
     @PostMapping
     public SiteVisit create(@RequestBody SiteVisitRequest r) {
         SiteVisit v = new SiteVisit();
-        v.setInventory(inventory.findById(r.getInventoryId()).get());
-        if (r.getEnquiryId()!=null) v.setEnquiry(enquiries.findById(r.getEnquiryId()).get());
-        v.setBdm(users.findById(r.getBdmId()).get());
+        v.setInventory(inventory.findById(r.getInventoryId()));
+        if (r.getEnquiryId()!=null) v.setEnquiry(enquiries.findById(r.getEnquiryId()));
+        v.setUser(users.findById(r.getUserId()));
         v.setVisitDate(r.getDate());
         v.setRemarks(r.getRemarks());
         v.setStatus(SiteVisit.Status.SCHEDULED);
@@ -63,20 +63,20 @@ public class SiteVisitController {
 
     @PutMapping("/{id}")
     public SiteVisit update(@PathVariable Long id, @RequestBody SiteVisitRequest r) {
-        SiteVisit v = visits.findById(id).get();
-        v.setInventory(inventory.findById(r.getInventoryId()).get());
-        v.setEnquiry(r.getEnquiryId()==null ? null : enquiries.findById(r.getEnquiryId()).get());
-        v.setBdm(users.findById(r.getBdmId()).get());
+        SiteVisit v = visits.findById(id);
+        v.setInventory(inventory.findById(r.getInventoryId()));
+        v.setEnquiry(r.getEnquiryId()==null ? null : enquiries.findById(r.getEnquiryId()));
+        v.setUser(users.findById(r.getUserId()));
         v.setVisitDate(r.getDate());
         v.setRemarks(r.getRemarks());
-        return visits.save(v);
+        return visits.update(id,v);
     }
 
     @GetMapping("/search")
-    public List<SiteVisit> search(@RequestParam(required=false) Long bdmId,
+    public List<SiteVisit> search(@RequestParam(required=false) Long userId,
                                   @RequestParam(required=false) LocalDate fromDate,
                                   @RequestParam(required=false) LocalDate toDate) {
-        if (bdmId == null || fromDate == null || toDate == null) return visits.findAll();
-        return visits.findByBdmIdAndVisitDateBetween(bdmId, fromDate, toDate);
+        if (userId == null || fromDate == null || toDate == null) return visits.findAll();
+        return visits.findByUserIdAndVisitDateBetween(userId, fromDate, toDate);
     }
 }

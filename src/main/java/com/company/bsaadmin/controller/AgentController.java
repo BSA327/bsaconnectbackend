@@ -31,7 +31,7 @@ public class AgentController {
 
     @GetMapping("/{id}")
     public Agent get(@PathVariable Long id) {
-        return service.findById(id).get();
+        return service.findById(id);
     }
 
     @PostMapping
@@ -43,6 +43,6 @@ public class AgentController {
     @PutMapping("/{id}")
     public Agent update(@PathVariable Long id, @RequestBody Agent input) {
         input.setId(id);
-        return service.save(input);
+        return service.update(id,input);
     }
 }

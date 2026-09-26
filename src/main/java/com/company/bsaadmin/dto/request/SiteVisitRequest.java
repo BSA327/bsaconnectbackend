@@ -6,7 +6,7 @@ import java.time.LocalDate;
 public class SiteVisitRequest {
     private Long inventoryId;
     private Long enquiryId;
-    private Long bdmId;
+    private Long userId;
     private LocalDate date;
     private String remarks;
 }

@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,6 +34,7 @@ public class Task extends Base {
 
 	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	@JoinColumn(name="user_id", nullable=false)
+	@JsonIgnore
 	private User user;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
@@ -46,6 +49,12 @@ public class Task extends Base {
 
 	public enum Status { PENDING, IN_PROGRESS, COMPLETED, CANCELLED }
 
+	@JsonProperty("employeeName")
+	public String getEmployeeName() {
+	    return user != null && user.getEmployee() != null
+	            ? user.getEmployee().getName()
+	            : null;
+	}
 
 
 }

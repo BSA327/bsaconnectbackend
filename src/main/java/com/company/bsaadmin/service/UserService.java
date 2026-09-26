@@ -10,7 +10,7 @@ import com.company.bsaadmin.entity.User;
 import com.company.bsaadmin.repository.UserRepository;
 
 @Service
-public class UserService  extends GenericService<User, Long>  {
+public class UserService  extends GenericService<User>  {
 
 	private final  UserRepository repository;
 

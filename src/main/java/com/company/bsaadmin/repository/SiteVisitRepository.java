@@ -10,6 +10,6 @@ import com.company.bsaadmin.entity.SiteVisit;
 
 @Repository
 public interface SiteVisitRepository extends JpaRepository<SiteVisit, Long> {
-    List<SiteVisit> findByBdmIdAndVisitDateBetween(Long bdmId, LocalDate from, LocalDate to); 
+    List<SiteVisit> findByUserIdAndVisitDateBetween(Long userId, LocalDate from, LocalDate to); 
     List<SiteVisit> findByInventoryId(Long inventoryId);
 }

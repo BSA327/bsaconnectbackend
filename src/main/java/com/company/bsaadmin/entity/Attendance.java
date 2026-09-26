@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +37,7 @@ public class Attendance extends Base {
 
 	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	@JoinColumn(name="user_id", nullable=false)
+	@JsonIgnore
 	private User user;
 
 	@Column(name="attendance_date", nullable=false)
@@ -65,6 +68,14 @@ public class Attendance extends Base {
 	private Status status;
 
 	public enum Status { PRESENT, PARTIAL, COMPLETED }
+	
+	
+	@JsonProperty("employeeName")
+	public String getEmployeeName() {
+	    return user != null && user.getEmployee() != null
+	            ? user.getEmployee().getName()
+	            : null;
+	}
 
 
 

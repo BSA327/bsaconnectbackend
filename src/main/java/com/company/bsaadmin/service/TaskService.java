@@ -10,7 +10,7 @@ import com.company.bsaadmin.entity.Task;
 import com.company.bsaadmin.repository.TaskRepository;
 
 @Service
-public class TaskService   extends GenericService<Task, Long>  {
+public class TaskService   extends GenericService<Task>  {
 
 	private final  TaskRepository repository;
 

@@ -9,7 +9,7 @@ import com.company.bsaadmin.entity.InventoryMedia;
 import com.company.bsaadmin.repository.InventoryMediaRepository;
 
 @Service
-public class InventoryMediaService   extends GenericService<InventoryMedia, Long>  {
+public class InventoryMediaService   extends GenericService<InventoryMedia>  {
 
 	private final  InventoryMediaRepository repository;
 
